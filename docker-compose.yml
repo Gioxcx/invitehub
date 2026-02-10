@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: docker/php/Dockerfile
     container_name: invitehub_app
+    user: "1000:1000"
     volumes:
       - .:/var/www
     depends_on:
