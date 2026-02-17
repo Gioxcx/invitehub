@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\InviteController;
+use App\Http\Controllers\Admin\InviteAdminController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -13,7 +15,8 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
-
+Route::get('/invites/{token}', [InviteController::class, 'show'])->name('invites.show');
+Route::post('/invites/{token}/accept', [InviteController::class, 'accept'])->name('invites.accept');
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -23,5 +26,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/invites', [InviteAdminController::class, 'index'])->name('invites.index');
+        Route::post('/invites', [InviteAdminController::class, 'store'])->name('invites.store');
+    });
 require __DIR__.'/auth.php';
