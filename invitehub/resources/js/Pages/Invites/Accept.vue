@@ -13,7 +13,7 @@ const form = useForm({
 })
 
 function submit() {
-  form.post(route('invites.accept', props.invite.token))
+  form.post(route('invites.accept', { token: props.invite.token }))
 }
 </script>
 

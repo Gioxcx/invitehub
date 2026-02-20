@@ -15,7 +15,8 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
-Route::get('/invites/{token}', [InviteController::class, 'show'])->name('invites.show');
+
+Route::get('/invites/{token}/accept', [InviteController::class, 'show'])->name('invites.accept.show');
 Route::post('/invites/{token}/accept', [InviteController::class, 'accept'])->name('invites.accept');
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

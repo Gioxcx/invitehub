@@ -2,8 +2,8 @@
 
 namespace App\Mail;
 
+use App\Models\Invite;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -16,7 +16,7 @@ class InviteUserMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(public Invite $invite)
     {
         //
     }
@@ -34,10 +34,14 @@ class InviteUserMail extends Mailable
     /**
      * Get the message content definition.
      */
-    public function content(): Content
+   public function content(): Content
     {
         return new Content(
             markdown: 'emails.invites.user',
+            with: [
+                'acceptUrl' => route('invites.accept.show', ['token' => $this->invite->token]),
+                'invite' => $this->invite,
+            ],
         );
     }
 

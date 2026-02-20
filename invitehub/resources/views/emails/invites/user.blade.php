@@ -3,7 +3,7 @@
 
 Você recebeu um convite para participar do Invite Hub. Para visualizar os detalhes do convite e aceitar, clique no botão abaixo.
 
-<x-mail::button :url="$acceptUrl ?? config('app.url')">
+<x-mail::button :url="$acceptUrl">
 Aceitar Convite
 </x-mail::button>
 
