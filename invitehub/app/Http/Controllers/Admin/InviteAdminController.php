@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
+use App\Models\User;
 
 class InviteAdminController extends Controller
 {
@@ -34,12 +35,14 @@ class InviteAdminController extends Controller
             ->where('email', $data['email'])
             ->where('status', 'pending')
             ->first();
-
-        if ($existing) {
+        if (User::where('email', $data['email'])->exists()) {
+            return back()->withErrors([
+            'email' => 'Este e-mail já possui acesso ao sistema.',]);
+        }
+           if ($existing) {
             Mail::to($existing->email)->send(new InviteUserMail($existing));
             return back()->with('success', 'Convite reenviado!');
-        }
-
+        }   
         $invite = Invite::create([
             'email' => $data['email'],
             'token' => Str::random(64),
