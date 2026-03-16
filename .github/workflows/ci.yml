@@ -10,20 +10,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Setup PHP
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+
+      # Install Composer dependencies
+      - name: Install PHP dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+      # Setup Node
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      - name: Install dependencies
+      # Install frontend deps
+      - name: Install Node dependencies
         run: npm install
 
-      - name: Run tests
-        run: npm test
+      # Build assets
+      - name: Build assets
+        run: npm run build
 
+      # Run tests
+      - name: Run tests
+        run: php artisan test
+
+      # SonarCloud
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
